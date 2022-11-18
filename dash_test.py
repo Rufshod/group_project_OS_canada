@@ -8,16 +8,10 @@ import plotly_express as px
 import dash_bootstrap_components as dbc
 import pandas as pd
 
-import datetime
-
-#Set time for stock prices
-
-start = datetime.datetime(2022, 1, 1)
-end = datetime.datetime(2022, 11, 16)
-
 #creating the dataframe with read csv
 df = pd.read_csv("Data/athlete_events.csv")
 df_os_canada = df[df["NOC"]=="CAN"] # Creating Canada df.
+df_os_winter = df_os_canada[df_os_canada["Season"] == "Winter"]
 #print df
 #print(df_os_canada.head())
 
@@ -32,9 +26,11 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],
 
 # notes:
 # 12 columns is the maximum of column in each rows.
+# html.Main is html's own container. html.Div is 
+
 
 #----------------------------------------------------------
-app.layout = dbc.Container([ # Every that shows up in the app needs to be in a container in order to be visable.
+app.layout = dbc.Container([ # Everything that shows up in the app needs to be in a container in order to be visable.
     dbc.Row([
         dbc.Col(html.H1("Canada Dashboard", # html.H1 is Title or header, 
         className="text-center text-danger mb-4"), # text center puts it in center, text danger makes text red.
@@ -45,7 +41,7 @@ app.layout = dbc.Container([ # Every that shows up in the app needs to be in a c
         dbc.Col([# new column inside row.
             dcc.Dropdown(id="my-drpdwn", multi=False, value="Swimming", #Sets dropdown and chooses Swimming as default.
                         options=[{"label": x, "value": x}  # Sets the options in drop down
-                                    for x in sorted(df_os_canada["Sport"].unique())]), # Every option in sport is avaliable.
+                                    for x in sorted(df_os_winter["Sport"].unique())]), # Every option in sport is avaliable.
             dcc.Graph(id="bar-fig", figure={}) #creates an empty figure as placeholder
         
         ], width = {"size" :5, "offset":1,"order":1}), # offset changes how many columns it is offset to left/right.Sets size to the first 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
@@ -53,7 +49,7 @@ app.layout = dbc.Container([ # Every that shows up in the app needs to be in a c
             dcc.Dropdown(id="my-drpdwn2", multi=True, value=["M","F"],  # auto selects both male and female
                         options=[{"label": x, "value": x}  # Sets the options in drop down
                                     for x in sorted(df_os_canada["Sex"].unique())]), # Every option in sex is avaliable.
-            dcc.Graph(id="bar-fig", figure={})
+            dcc.Graph(id="bar-fig2", figure={})
         ], width = {"size" :5, "offset":0, "order":2}) #Order changes what order elements will display.  # Sets size to the first avaliable space 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
     ]),
 
