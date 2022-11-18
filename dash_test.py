@@ -53,11 +53,10 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
         className="text-left text-danger mb-4"), # text center puts it in center, text danger makes text red.
         width={"size" :2, "offset":1,"order":1}),
 
-        dbc.Col(html.H1("Olympic rings", # html.H1 is Title or header, 
-        className="text-right text-danger mb-4"), # text center puts it in center, text danger makes text red.
-        width={"size" :2, "offset":6,"order":2}),
-        dbc.CardImg(src="os_logo.png")    
-    ]),
+        #dbc.Col(html.H1("Olympic rings", # html.H1 is Title or header, 
+        #className="text-right text-danger mb-4"), # text center puts it in center, text danger makes text red.
+        #width={"size" :2, "offset":6,"order":2}),
+        html.Img(src= "../Assets/os_test.png")    ]),
 
     dbc.Row([
         dbc.Col([# new column inside row.
