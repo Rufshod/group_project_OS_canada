@@ -22,9 +22,8 @@ canada_options = [{"label": option, "value": option} for option in ("top 10 spor
 sports_options = [{"label": option, "value": option} for option in ("num of medals", "mean age", "prop athletes", "age distro sport")]
 radio_options = [{"label": option, "value": option} for option in ("Athletics", "Swimming")]
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY],
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],
                 meta_tags=[{"name": "viewport","content": "width=device-width, initial-scale=1.0"}]) # automaticly creates a responsive site so that mobileusers can use it.
-
 
 
 # Layout section: Bootstrap
@@ -87,8 +86,8 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
     
 
     dbc.Row([
-        dbc.Col([dcc.Graph(id="canada_graph", figure={})]),
-        dbc.Col([dcc.Graph(id="sport_graph", figure={})]),
+        dbc.Col([dcc.Graph(id="canada_graph", figure={})], width={"size":6,"offset":0}),
+        dbc.Col([dcc.Graph(id="sport_graph", figure={})], width={"size":6,"offset":0}),
         ])
 
 ], fluid=True) # Fluid removes space from left and right. Try changing to false to see the difference.
