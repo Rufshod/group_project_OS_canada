@@ -17,7 +17,12 @@ df_os_summer = df_os_canada[df_os_canada["Season"] == "Summer"]
 
 #creating the app
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],
+#Variables 
+canada_options = [{"label": option, "value": option} for option in ("top 10 sports", "medals per os", "prop athletes", "age distro can", "sex distro")]
+sports_options = [{"label": option, "value": option} for option in ("num of medals", "mean age", "prop athletes", "age distro sport")]
+radio_options = [{"label": option, "value": option} for option in ("Athletics", "Swimming")]
+
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY],
                 meta_tags=[{"name": "viewport","content": "width=device-width, initial-scale=1.0"}]) # automaticly creates a responsive site so that mobileusers can use it.
 
 
@@ -50,40 +55,40 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],
 app.layout = dbc.Container([ # Everything that shows up in the app needs to be in a container in order to be visable.
     dbc.Row([
         dbc.Col(html.H1("Dashboard", # html.H1 is Title or header, 
-        className="text-left text-danger mb-4"), # text center puts it in center, text danger makes text red.
+        className="text-left text-danger mb-4 border border-danger", style={"textDecoration": "underline"}), # text center puts it in center, text danger makes text red.
         width={"size" :2, "offset":1,"order":1}),
 
-        #dbc.Col(html.H1("Olympic rings", # html.H1 is Title or header, 
-        #className="text-right text-danger mb-4"), # text center puts it in center, text danger makes text red.
-        #width={"size" :2, "offset":6,"order":2}),
-        html.Img(src= "../assets/os_logo.png", className="img-fluid", alt="Responsive image"),
+        dbc.Col(html.H1("os_logo.png", # html.H1 is Title or header, 
+        className="text-right text-danger mb-4"), # text center puts it in center, text danger makes text red.
+        width={"size" :2, "offset":6,"order":2}),
+        #html.Img(src= "../assets/os_logo.png", className="img-fluid", alt="Responsive image"), # Add in image later.
         ]),
 
     dbc.Row([
         dbc.Col([# new column inside row.
-            dcc.Dropdown(id="my-drpdwn", multi=False, value="Swimming", #Sets dropdown and chooses Swimming as default.
-                        options=[{"label": x, "value": x}  # Sets the options in drop down
-                                    for x in sorted(df_os_summer["Sport"].unique())]), # Every option in sport is avaliable.
+
+        # ----------------------------------- CANADA DROPDOWN -----------------------------------
+            dcc.Dropdown(id="canada_dropdown", multi=False, value="top 10 sports", #Sets dropdown and chooses Swimming as default.
+                        options=canada_options), # Every option in sport is avaliable.
+                        ], width = {"size" :2, "offset":1,"order":1}), # offset changes how many columns it is offset to left/right.Sets size to the first 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
         
-        ], width = {"size" :2, "offset":1,"order":1}), # offset changes how many columns it is offset to left/right.Sets size to the first 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
         dbc.Col([ # new column inside row.
-            dcc.Dropdown(id="my-drpdwn2", multi=True, value=["Atlanta","Sydney"],  # auto selects both male and female
-                        options=[{"label": x, "value": x}  # Sets the options in drop down
-                                    for x in sorted(df_os_canada["City"].unique())]), # Every option in sex is avaliable.
+        # ----------------------------------- SPORTS DROPDOWN -----------------------------------
+            dcc.Dropdown(id="sports_dropdown_options", value="mean age",  # auto selects both male and female
+                        options=sports_options), # sets drop down options
 
         ], width = {"size" :2, "offset":4, "order":2  }), #Order changes what order elements will display.  # Sets size to the first avaliable space 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
+        # ----------------------------------- RADIO DROPDOWN -----------------------------------
         dbc.Col([ # new column inside row.
-            dcc.Dropdown(id="my-drpdwn3", multi=True, value=["Sydney"],  # auto selects both male and female
-                        options=[{"label": "RADIOITEM", "value": x}  # Sets the options in drop down
-                                    for x in sorted(df_os_canada["City"].unique())]), # Every option in sex is avaliable.
+            dcc.RadioItems(id="sports_radio", options= radio_options, value="Swimming",), #radio_options var can be found on row 21 
+                ], width = {"size" :2, "offset":0, "order":3}, className="text-success")]), # MR 3 should put a larger space between Athletics and swimming. It does not work though...
 
-        ], width = {"size" :2, "offset":0, "order":3}) #Order changes what order elements will display.  # Sets size to the first avaliable space 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
+ #Order changes what order elements will display.  # Sets size to the first avaliable space 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
     
-    ],),
 
     dbc.Row([
-        dbc.Col([dcc.Graph(id="testplot", figure={})]),
-        dbc.Col([dcc.Graph(id="testplot1", figure={})]),
+        dbc.Col([dcc.Graph(id="canada_graph", figure={})]),
+        dbc.Col([dcc.Graph(id="sport_graph", figure={})]),
         ])
 
 ], fluid=True) # Fluid removes space from left and right. Try changing to false to see the difference.
