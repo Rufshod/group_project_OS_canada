@@ -1,2 +1,5 @@
-/* #os_logo{width:150px;} */
-label{margin-right: 1rem;}
+#os_logo{width:100px;}
+#c_logo{width:100px;}
+.card{background-color: coral;} /*.card is now a class. that changes background color to blue
+/* #head1{border-collapse: collapse ;} */
+/*label{margin-right: 1rem;}

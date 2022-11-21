@@ -9,7 +9,7 @@ import plotly.io as pio
 import dash_bootstrap_components as dbc
 import pandas as pd
 
-pio.templates.default = "presentation"
+pio.templates.default = "gridon"
 
 #creating the dataframe with read csv
 df = pd.read_csv("Data/athlete_events.csv")
@@ -41,7 +41,7 @@ def clean_df_from_athlet_repeat(df):
 #Variables # Check type
 canada_options = [{"label": option, "value": option} for option in ("Best sports", "Number of medals", "Age distribution")]
 sports_options = [{"label": option, "value": option} for option in ("Number of medals", "Average age per year", "Age distribution", "Relative number of athletes")]
-radio_options = [{"label": option, "value": option} for option in ("Athletics", "Swimming", "Gymnastics")]
+radio_options = [{"label": option, "value": option} for option in ("Athletics", "Swimming", "Gymnastics", "Ice Hockey")]
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SANDSTONE],
                 meta_tags=[{"name": "viewport","content": "width=device-width, initial-scale=1.0"}]) # automaticly creates a responsive site so that mobileusers can use it.
@@ -69,95 +69,69 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SANDSTONE],
 
   # def team_df.clean(df):
     #   return df.
-#
-# 
-# 
-# 
-#  app.layout = dbc.Container([
-#  dbc.Row([
-#       htmlH1.(titel),
-        #html.Img(src= "../assets/os_logo.png"
-#   ]),
-    #dbc.Row([
-    # dbc.Col([
-    #       dbc.Card()
-    # ],),
-    # dbc.Col([
-    #       dbc.Card()
-    # ])
-    # ])
-#   
-# 
-# 
-# 
-# 
-# 
-# ])
 
 #----------------------------------------------------------
 app.layout = dbc.Container([ # Everything that shows up in the app needs to be in a container in order to be visable.
-    
-    dbc.Col([
-        dbc.Row([
-            dbc.Col(html.H1("Dashboard", # html.H1 is Title or header, 
-            id= "head1",className="text-left text-danger mb-2 fw-bold shadow", style={"textDecoration": "underline"}), # text center puts it in center, text danger makes text red.
-            width={"size" :0, "offset":0,"order":0}),
-
-            
-            html.Img(src= "../assets/os_logo.png", id="os_logo", className="w-15 mb-2 ml-5"), # Add in image later.
-            ],),
-            dbc.Card(
-                [
-                    dbc.CardBody(
-                        html.H1("Canada",
-                        className="text-danger text-bottom card") # card is a class name now. .card in css. 
-                        ),
-                dbc.CardImg(src = "../assets/Flag_Canada.png", id="c_logo", className="card-img-top"),
-            ],)
-
-        ],width={"size" :3, "offset":1,"order":0}),
-# Insert row with text canada on left sport on right. picture of canadian flag
-
-    # dbc.Row([
-    #     dbc.Col(html.H1("Canada", id))
-    # ]),
-#Can everything fit in a card? with card titel?
-    
-               
-
+# First row with dashboard header and olympic logo.
     dbc.Row([
-        dbc.Col([# new column inside row.
-            
-        # ----------------------------------- CANADA DROPDOWN -----------------------------------
-            dcc.Dropdown(id="canada_dropdown", multi=False, value="Number of medals", #Sets dropdown and chooses Swimming as default.
-                        options=canada_options), # Every option in sport is avaliable.
-                        ], width = {"size" :2, "offset":1,"order":1}), # offset changes how many columns it is offset to left/right.Sets size to the first 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
-        
-        dbc.Col([ # new column inside row.
-        # ----------------------------------- SPORTS DROPDOWN -----------------------------------
-            dcc.Dropdown(id="sports_dropdown_options", value="Number of medals",  # auto selects both male and female
-                        options=sports_options), # sets drop down options
 
-        ], width = {"size" :2, "offset":4, "order":2  }), #Order changes what order elements will display.  # Sets size to the first avaliable space 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
-        # ----------------------------------- RADIO DROPDOWN -----------------------------------
-        dbc.Col([ # new column inside row.
-            dcc.RadioItems(id="sports_radio", options= radio_options, value="Swimming",), #radio_options var can be found on row 21 
-                ], width = {"size" :2, "offset":0, "order":3}, className="text-danger border border-danger mr-3")]), # MR 3 should put a larger space between Athletics and swimming. It does not work though...
-         
-#MR 3 NOTES: Dash / HTLM. Lösning: Vilket element jag ska styla. Lägga till css
-
-
- #Order changes what order elements will display.  # Sets size to the first avaliable space 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
-    
-
+        dbc.Col([html.H1("Dashboard",id= "head1",className="" )],width={"offset":1}), # html.H1 is Title or header, 
+        dbc.Col([html.Img(src= "../assets/os_logo.png", id="os_logo", className="mb-3")]),   
+    ]),
+# Second row for both cards.
     dbc.Row([
-        dbc.Col([dcc.Graph(id="canada_graph", figure={},className="shadow-lg")], width={"size":6,"offset":0}),
-        dbc.Col([dcc.Graph(id="sport_graph", figure={},className="shadow-lg")], width={"size":6,"offset":0}),
+    # Column for Canada
+        dbc.Col([
+            # Card for Canada
+            dbc.Card([
+                #Column with Text for Canada
+                dbc.Col([html.H1("Canada",id= "canada_text",className="" ),dbc.CardImg(src = "../assets/Flag_Canada.png", id="c_logo", className="card card-img-bottom")],width={}),
+
+                #Column with CardImg
+                dbc.Col([]),
+                
+                #Column with Dropdown for Canada
+                dbc.Col([dcc.Dropdown(id="canada_dropdown", multi=False, value="Number of medals", #Sets dropdown and chooses Swimming as default.
+                        options=canada_options),]),
+                #Column with Graph for Canada
+                dbc.Col([dcc.Graph(id="canada_graph", figure={},className="card mb-3")],),
+                
+                ],
+                
+
+
+                ),
+                ],width={"size":5,"offset":0}),
+
+    # Card two for Sports
+        dbc.Col([
+            # Card for Sports
+            dbc.Card([
+                #Column with Text for Sports
+                dbc.Col([html.H1("Sports",id= "sports_text",className="" )],width={}),
+
+                #Column with Dropdown for Sports
+                dbc.Col([dcc.Dropdown(id="sports_dropdown_options", value="Number of medals",  # auto selects both male and female
+                        options=sports_options)]),
+                
+                #Column with RadioItems for Sports
+                dbc.Col([dcc.RadioItems(id="sports_radio", options= radio_options, value="Swimming",)]
+                ,width = {}, className="mt-3 mb-3"),
+                #Column with Graph for Sports
+                dbc.Col([dcc.Graph(id="sport_graph", figure={},className="mb-3")],),
+                
+                ]
+                
+
+
+                )
+                ],width={"size":5,"offset":0}),
+
+
+
+
         ])
-
-], fluid=True) # Fluid removes space from left and right. Try changing to false to see the difference.
-
-# i layouten dcc.Store(id="dff")
+])
 
 #----------------------------------------
 # canada analysis
