@@ -72,7 +72,7 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
 # First row with dashboard header and olympic logo.
     dbc.Row([
 
-        dbc.Col([html.H1("Dashboard",id= "head1",className="" , style={"textDecoration": "underline"} )],width={"offset":0}, ), # html.H1 is Title or header, 
+        dbc.Col([html.H1("Dashboard",id= "head1",className="text bold" )],width={"offset":0}, ), # html.H1 is Title or header, 
         dbc.Col([html.Img(src= "../assets/os_logo.png", id="os_logo", className="mb-3 ")]),   
     ]),
 # Second row for both cards.
@@ -82,13 +82,13 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
             # Card for Canada
             dbc.Card([
                 #Column with Text for Canada
-                dbc.Col([html.H1("Canada",id= "canada_text",className="" ),dbc.CardImg(src = "../assets/Flag_Canada.png", id="c_logo", className="card card-img-bottom")],width={}),
+                dbc.Col([html.H1("Canada",id= "canada_text",className="" , style={"textDecoration": "underline"} ),dbc.CardImg(src = "../assets/Flag_Canada.png", id="c_logo", className="")],width={}),
 
                 #Column with CardImg
                 dbc.Col([]),
                 
                 #Column with Dropdown for Canada
-                dbc.Col([dcc.Dropdown(id="canada_dropdown", multi=False, value="Number of medals", #Sets dropdown and chooses Swimming as default.
+                dbc.Col([dcc.Dropdown(id="canada_dropdown", className="mb-", multi=False, value="Number of medals", #Sets dropdown and chooses Swimming as default.
                         options=canada_options),]),
                 #Column with Graph for Canada
                 dbc.Col([dcc.Graph(id="canada_graph", figure={},className="card mb-3")],),
@@ -105,7 +105,7 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
             # Card for Sports
             dbc.Card([
                 #Column with Text for Sports
-                dbc.Col([html.H1("Sports",id= "sports_text",className="", style={"textDecoration": "underline bold"} )],width={}),
+                dbc.Col([html.H1("Sports",id= "sports_text",className="", style={"textDecoration": "underline"} )],width={}),
 
                 #Column with Dropdown for Sports
                 dbc.Col([dcc.Dropdown(id="sports_dropdown_options", value="Number of medals",  # auto selects both male and female

@@ -1,5 +1,6 @@
-#os_logo{width:100px; margin-left: 35rem;}
-#c_logo{width:100px;}
-.card{background-color: #6158e9;} /*.card is now a class. that changes background color to blue
+#os_logo{width:120px; margin-left: 80%;}
+#c_logo{width:100px; margin-left: 80%;}
+.card{background-color: #dedede;} /*.card is now a class. that changes background color to blue
 /* #head1{border-collapse: collapse ;} */
-label{margin-right: 5rem;}
+label{margin-right: 8%; margin-left: 8%; background-size: 50%; background-color: 
+    #ececec; border-style: groove; border: 2px solid rgb(89, 89, 89); border-radius: 5px;}
