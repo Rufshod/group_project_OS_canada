@@ -13,10 +13,7 @@ pio.templates.default = "gridon"
 
 #creating the dataframe with read csv
 df = pd.read_csv("Data/athlete_events.csv")
-df_os_canada = df[df["NOC"]=="CAN"] # Creating Canada df.
-df_os_summer = df_os_canada[df_os_canada["Season"] == "Summer"]
 
-px
 #--------------------------------------------------
 
 # functions
@@ -41,7 +38,7 @@ def clean_df_from_athlet_repeat(df):
 #Variables # Check type
 canada_options = [{"label": option, "value": option} for option in ("Best sports", "Number of medals", "Age distribution")]
 sports_options = [{"label": option, "value": option} for option in ("Number of medals", "Average age per year", "Age distribution", "Relative number of athletes")]
-radio_options = [{"label": option, "value": option} for option in ("Athletics", "Swimming", "Gymnastics", "Ice Hockey")]
+radio_options = [{"label": option, "value": option} for option in ("Athletics", "Swimming", "Gymnastics")]
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SANDSTONE],
                 meta_tags=[{"name": "viewport","content": "width=device-width, initial-scale=1.0"}]) # automaticly creates a responsive site so that mobileusers can use it.
@@ -75,8 +72,8 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
 # First row with dashboard header and olympic logo.
     dbc.Row([
 
-        dbc.Col([html.H1("Dashboard",id= "head1",className="" )],width={"offset":1}), # html.H1 is Title or header, 
-        dbc.Col([html.Img(src= "../assets/os_logo.png", id="os_logo", className="mb-3")]),   
+        dbc.Col([html.H1("Dashboard",id= "head1",className="" , style={"textDecoration": "underline"} )],width={"offset":0}, ), # html.H1 is Title or header, 
+        dbc.Col([html.Img(src= "../assets/os_logo.png", id="os_logo", className="mb-3 ")]),   
     ]),
 # Second row for both cards.
     dbc.Row([
@@ -101,14 +98,14 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
 
 
                 ),
-                ],width={"size":5,"offset":0}),
+                ],width={"size":6,"offset":0}),
 
     # Card two for Sports
         dbc.Col([
             # Card for Sports
             dbc.Card([
                 #Column with Text for Sports
-                dbc.Col([html.H1("Sports",id= "sports_text",className="" )],width={}),
+                dbc.Col([html.H1("Sports",id= "sports_text",className="", style={"textDecoration": "underline bold"} )],width={}),
 
                 #Column with Dropdown for Sports
                 dbc.Col([dcc.Dropdown(id="sports_dropdown_options", value="Number of medals",  # auto selects both male and female
@@ -125,7 +122,7 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
 
 
                 )
-                ],width={"size":5,"offset":0}),
+                ],width={"size":6,"offset":0}),
 
 
 
