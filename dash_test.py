@@ -12,14 +12,32 @@ import pandas as pd
 df = pd.read_csv("Data/athlete_events.csv")
 df_os_canada = df[df["NOC"]=="CAN"] # Creating Canada df.
 df_os_summer = df_os_canada[df_os_canada["Season"] == "Summer"]
+
+
+#--------------------------------------------------
+
+# functions
+
+def clean_df_from_team(df):
+    """Function removes duplicates where each idividual is indicated with medal in team efforts"""
+    dff = df.drop_duplicates(subset=["Year", "Event", "Medal"])
+    return dff
+
+def clean_df_from_athlet_repeat(df):
+    """Function removes duplicates where same individual is listed several times same olympics"""
+    dff = df.drop_duplicates(subset=["ID", "Year"])
+    return dff
+
+
+
 #print df
 #print(df_os_canada.head())
 
 #creating the app
 
-#Variables 
-canada_options = [{"label": option, "value": option} for option in ("top 10 sports", "medals per os", "prop athletes", "age distro can", "sex distro")]
-sports_options = [{"label": option, "value": option} for option in ("num of medals", "mean age", "prop athletes", "age distro sport")]
+#Variables # Check type
+canada_options = [{"label": option, "value": option} for option in ("Best sports", "Number of medals", "Age distribution")]
+sports_options = [{"label": option, "value": option} for option in ("Number of medals", "Average age per year", "Age distribution", "Relative number of athletes")]
 radio_options = [{"label": option, "value": option} for option in ("Athletics", "Swimming")]
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],
@@ -38,7 +56,7 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],
 # @callback(Output("graph-left")),
 #            input("sport.dropdown")
 # def update.sport.graph(sport)
-#       dffilter = df.query("Sport == @sport") @sport is a variable from aboce.
+#       dffilter = df.query("Sport == @sport") @sport is a variable from above.
 #       fig = px.bar(...)
             #return fig
 
@@ -55,32 +73,36 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
     dbc.Row([
         dbc.Col(html.H1("Dashboard", # html.H1 is Title or header, 
         className="text-left text-danger mb-4 border border-danger", style={"textDecoration": "underline"}), # text center puts it in center, text danger makes text red.
-        width={"size" :2, "offset":1,"order":1}),
+        width={"size" :2, "offset":2,"order":0}),
 
-        dbc.Col(html.H1("os_logo.png", # html.H1 is Title or header, 
-        className="text-right text-danger mb-4"), # text center puts it in center, text danger makes text red.
-        width={"size" :2, "offset":6,"order":2}),
-        #html.Img(src= "../assets/os_logo.png", className="img-fluid", alt="Responsive image"), # Add in image later.
-        ]),
+        
+        html.Img(src= "../assets/os_logo.png", id="os_logo", className="w-15"), # Add in image later.
+        ],),
+
+# Insert row with text canada on left sport on right. picture of canadian flag
+
 
     dbc.Row([
         dbc.Col([# new column inside row.
 
         # ----------------------------------- CANADA DROPDOWN -----------------------------------
-            dcc.Dropdown(id="canada_dropdown", multi=False, value="top 10 sports", #Sets dropdown and chooses Swimming as default.
+            dcc.Dropdown(id="canada_dropdown", multi=False, value="Best sports", #Sets dropdown and chooses Swimming as default.
                         options=canada_options), # Every option in sport is avaliable.
                         ], width = {"size" :2, "offset":1,"order":1}), # offset changes how many columns it is offset to left/right.Sets size to the first 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
         
         dbc.Col([ # new column inside row.
         # ----------------------------------- SPORTS DROPDOWN -----------------------------------
-            dcc.Dropdown(id="sports_dropdown_options", value="mean age",  # auto selects both male and female
+            dcc.Dropdown(id="sports_dropdown_options", value="Number of medals",  # auto selects both male and female
                         options=sports_options), # sets drop down options
 
         ], width = {"size" :2, "offset":4, "order":2  }), #Order changes what order elements will display.  # Sets size to the first avaliable space 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
         # ----------------------------------- RADIO DROPDOWN -----------------------------------
         dbc.Col([ # new column inside row.
             dcc.RadioItems(id="sports_radio", options= radio_options, value="Swimming",), #radio_options var can be found on row 21 
-                ], width = {"size" :2, "offset":0, "order":3}, className="text-success")]), # MR 3 should put a larger space between Athletics and swimming. It does not work though...
+                ], width = {"size" :2, "offset":0, "order":3}, className="text-danger border border-danger mr-3")]), # MR 3 should put a larger space between Athletics and swimming. It does not work though...
+
+#MR 3 NOTES: Dash / HTLM. Lösning: Vilket element jag ska styla. Lägga till css
+
 
  #Order changes what order elements will display.  # Sets size to the first avaliable space 6 colums from the left, also changes width for both graph and dropdown because it is at the end of the column object.
     
@@ -92,7 +114,75 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
 
 ], fluid=True) # Fluid removes space from left and right. Try changing to false to see the difference.
 
+# i layouten dcc.Store(id="dff")
 
+#----------------------------------------
+# canada analysis
+# canada-analysis-dropdown can be "Best sports", "Number of medals", "Age distribution", thus drop-down has those choices
+
+@app.callback(
+    Output("canada_graph", "figure"),
+    Input("canada_dropdown", "value"),
+)
+def update_canada_graph(analysis_chosen):
+    dff = df[df["NOC"] == "CAN"]                # filters out rows for Canada
+    
+    if analysis_chosen == "Best sports":
+        dff = clean_df_from_team(dff).groupby("Sport").count().sort_values(by="Medal", ascending=False).head(10)
+        fig = px.bar(dff, x=dff.index, y=["Medal"], title="Canada 10 top sports", labels={"value": "Total number of medals"})
+        fig.update_layout(showlegend=False)
+    
+    if analysis_chosen == "Number of medals":
+        dff = clean_df_from_team(dff).groupby("Year").count().sort_values(by="Medal", ascending=False)
+        fig = px.bar(dff, x=dff.index, y=["Medal"], title="Canadian medals per olympics", labels={"value": "Total number of medals"})
+        fig.update_layout(showlegend=False)
+
+    if analysis_chosen == "Age distribution":
+        fig = px.histogram(dff, x="Age", nbins=80, title="Age distribution canadian athletes", labels={"count": "Number of athletes"})     
+    
+    return fig
+
+#----------------------------------------------------
+
+#sports analysis part
+
+# sports-analysis-dropdown can be ["Number of medals", "Average age per year", "Age distribution", "Relative number of athletes"]
+# sports-radio can be ["Athletics", "Swimming"]
+
+@app.callback(
+    Output("sport_graph", "figure"),
+    Input("sports_dropdown_options", "value"),
+    Input("sports_radio", "value") # Swimming by default
+)
+
+def uppdate_sports_graph(analysis_chosen, sport_chosen):
+    dff = df[df["Sport"] == sport_chosen]                 # hur får man in rätt värde här dvs Athletics eller swimming
+
+    if analysis_chosen == "Number of medals":
+        dff = clean_df_from_team(dff).groupby("Year").agg({"Medal":"count", "Age":"mean"})
+        fig = px.bar(dff, x=dff.index, y=["Medal"], title=f"Total number of medals in {sport_chosen} per year", labels={"value": "Number of medals"})
+        fig.update_layout(showlegend=False)
+        fig.update_traces(hovertemplate = "Year: %{label}: <br>Number of medals: %{value}")
+    
+    if analysis_chosen == "Average age per year":
+        dff = dff.groupby("Year").agg({"Medal":"count", "Age":"mean"})
+        fig = px.bar(dff, x=dff.index, y=["Age"], title= f"Average age in {sport_chosen} per year", labels={"value": "Average age"})
+        fig.update_layout(showlegend=False, yaxis_range = [15,30])
+        fig.update_traces(hovertemplate = "Year: %{label}: <br>Average age: %{value}")
+    
+    if analysis_chosen == "Age distribution":
+        fig = px.histogram(dff, x="Age", nbins=80, title= f"Age distribution {sport_chosen}", labels={"count": "Number of athletes"})
+    
+    if analysis_chosen == "Relative number of athletes":
+        dff_chosen_sport = clean_df_from_athlet_repeat(dff).groupby("Year").count().rename(columns={"ID":"Number in sport"})
+        dff_all_sports = clean_df_from_athlet_repeat(df).groupby("Year").count().rename(columns={"ID":"Number tot"})
+        dff = pd.concat([dff_chosen_sport, dff_all_sports], axis = 1)
+        dff["Rel athletes in sport"] = 100 * dff["Number in sport"]/dff["Number tot"]
+        fig = px.bar(dff, x=dff.index, y=["Rel athletes in sport"], title=f"Number of athletes in {sport_chosen} relative to all athletes", labels={"value": "Percentage"})
+        fig.update_layout(showlegend=False)
+        fig.update_traces(hovertemplate = "Year: %{label}: <br>Percentage: %{value}")
+
+    return fig
 
 
 # This code is needed in order to run.
