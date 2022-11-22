@@ -36,7 +36,7 @@ server = app.server  # Needed for Heroku to connect to app.
 
 #----------------------------------------------------------
 
-app.layout = dbc.Container([ # Everything that shows up in the app needs to be in a container in order to be visable.
+app.layout = dbc.Container([ # Everything that is shown in app needs to be in Container
 
 # First row for both cards.
     dbc.Row([
@@ -45,14 +45,14 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
             # Card for Canada
             dbc.Card([
                 #Column with Text for Canada
-                dbc.Col([html.H1("Canada",id= "canada_text",className="" , style={"textDecoration": "underline"} ,),
+                dbc.Col([html.H1("Canada",id= "canada_text", style={"textDecoration": "underline"} ,),
                 
                 #Same Column as below with CardImg
-                dbc.CardImg(src = "../assets/Flag_Canada.png", id="c_logo", className="")], id="header1",width={}),
+                dbc.CardImg(src = "../assets/Flag_Canada.png", id="c_logo")], id="header1"),
 
                 #Column with Dropdown for Canada
-                dbc.Col([dcc.Dropdown(id="canada_dropdown", className="", multi=False, value="Number of medals", #Sets dropdown and chooses Swimming as default.
-                        options=canada_options),]),
+                dbc.Col([dcc.Dropdown(id="canada_dropdown", multi=False, value="Number of medals",
+                        options=canada_options)]),
                 #Column with Graph for Canada
                 dbc.Col([dcc.Graph(id="canada_graph", figure={},className="card")],),
                 ],
@@ -64,18 +64,18 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
             # Card for Sports
             dbc.Card([
                 #Column with Text for Sports
-                dbc.Col([html.H1("Sports",id= "sports_text",className="", style={"textDecoration": "underline"} ),html.Img(src= "../assets/os_logo.png", id="os_logo", className="")], id="header2",width={}),
+                dbc.Col([html.H1("Sports",id= "sports_text", style={"textDecoration": "underline"}),
+                html.Img(src= "../assets/os_logo.png", id="os_logo")], id="header2"),
 
                 
                 #Column with RadioItems for Sports
-                dbc.Col([dcc.RadioItems(id="sports_radio", options= radio_options, value="Swimming",)]
-                ,width = {}, className=""),
+                dbc.Col([dcc.RadioItems(id="sports_radio", options= radio_options, value="Swimming")]),
                 
                 #Column with Dropdown for Sports
-                dbc.Col([dcc.Dropdown(id="sports_dropdown_options", value="Number of medals",  # auto selects both male and female
+                dbc.Col([dcc.Dropdown(id="sports_dropdown_options", value="Number of medals",
                         options=sports_options)]),
                 #Column with Graph for Sports
-                dbc.Col([dcc.Graph(id="sport_graph", figure={},className="mt-4 mb-3")],),
+                dbc.Col([dcc.Graph(id="sport_graph", figure={},className="mt-4 mb-3")]),
                 ]
             )
         ],width={"size":6,"offset":0}),

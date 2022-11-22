@@ -1,11 +1,26 @@
 #header1{display:flex; gap: 60%;}
 #header2{display:flex; gap: 60%;}
+
 #os_logo{width:120px;height:60px;}
 #c_logo{width:100px; height:55px;}
+
 #sports_radio{accent-color: #b91d1d ;}
 #canada_dropdown{margin-top: 13%;}
-.card{background-color: #dedede; padding: 20px;} /*.card is now a class. that changes background color to blue
-/* #head1{border-collapse: collapse ;} */
-label{margin-right: 4%; margin-left: 13%; background-size: 50%; background-color: 
-    #ffffff; border-style: groove; border: 3px solid #b91d1d; border-radius: 5px; padding: 5px;}
+
+/* .card is now a class. that changes background color to white */
+.card{background-color: #dedede; padding: 20px;} 
+
 .col{ padding: 20px;}
+
+label{margin-right: 4%; margin-left: 13%;
+     background-size: 50%; background-color: 
+    #ffffff; border-style: groove; border: 3px 
+    solid #b91d1d; border-radius: 5px; padding: 5px;}
+
+
+
+
+
+
+
+
