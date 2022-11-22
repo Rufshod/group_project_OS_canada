@@ -85,8 +85,8 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
 ])
 
 #--------------------------------------------------------------------------------
-# canada analysis
-
+# canada analysis call-back
+# input from drop-down
 
 @app.callback(
     Output("canada_graph", "figure"),
@@ -95,9 +95,16 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
 def update_canada_graph(analysis_chosen):
     dff = df[df["NOC"] == "CAN"]                # filters out rows for Canada
     
+    # one if statement for each possible choice from canada_dropdown "value"
+    # under each statment: dff is created by appropiat filtering and fig is created
+    # function returns fig
+
     if analysis_chosen == "Best sports":
-        dff = clean_df_from_team(dff).groupby("Sport").count().sort_values(by="Medal", ascending=False).head(10) 
+        # dff: removed pultiple entries for team efforts, grouped by Sport and counted valies for Medal, sorted and picked 10 top values
+        dff = clean_df_from_team(dff).groupby("Sport").count().sort_values(by="Medal", ascending=False).head(10)
+        # bar plot with x = Sport, y = medal
         fig = px.bar(dff, x=dff.index, y=["Medal"], title="Canada 10 top sports", labels={"value": "Total number of medals"})
+        # legend is not shown
         fig.update_layout(showlegend=False)
     
     if analysis_chosen == "Number of medals":
@@ -109,23 +116,21 @@ def update_canada_graph(analysis_chosen):
         fig = px.histogram(dff, x="Age", nbins=80, title="Age distribution canadian athletes", labels={"count": "Number of athletes"})     
         fig.update_layout(yaxis_title="Number of athletes")
         
-    return fig
+    return fig                                    # returns figure till Output
 
-#----------------------------------------------------
+#---------------------------------------------------------------------------------------------------
+# sports analysis call-back
+# input from drop-down and radio-items
 
-#sports analysis part
-
-#----------------------------------------------------
 @app.callback(
     Output("sport_graph", "figure"),
     Input("sports_dropdown_options", "value"),
-    Input("sports_radio", "value") # Swimming by default
+    Input("sports_radio", "value")                   # Swimming by default
 )
 
 def uppdate_sports_graph(analysis_chosen, sport_chosen):
-    dff = df[df["Sport"] == sport_chosen]                 
-
-    sport_chosen = sport_chosen.lower() # changes sport_chosen to lowercase for style reasons
+    dff = df[df["Sport"] == sport_chosen]           # filters for sport selected in radio-item             
+    sport_chosen = sport_chosen.lower()             # changes sport_chosen to lowercase for style reasons
 
     if analysis_chosen == "Number of medals":
         dff = clean_df_from_team(dff).groupby("Year").agg({"Medal":"count", "Age":"mean"})
@@ -144,13 +149,16 @@ def uppdate_sports_graph(analysis_chosen, sport_chosen):
         fig.update_layout(yaxis_title="Number of athletes")
 
     if analysis_chosen == "Relative number of athletes":
+        # 2 temp dffs created: one for chosen sport and on for all sports
+        # col "ID" shows number of athlets in each dff. "ID" is renamed in each to enable concatinarion
+        # 2 temp dffs are concatinated and new column created with ratio of athletes from chosen sport
         dff_chosen_sport = clean_df_from_athlet_repeat(dff).groupby("Year").count().rename(columns={"ID":"Number in sport"})
         dff_all_sports = clean_df_from_athlet_repeat(df).groupby("Year").count().rename(columns={"ID":"Number tot"})
         dff = pd.concat([dff_chosen_sport, dff_all_sports], axis = 1)
         dff["Rel athletes in sport"] = 100 * dff["Number in sport"]/dff["Number tot"]
         fig = px.line(dff, x=dff.index, y=["Rel athletes in sport"], title=f"Number of athletes in {sport_chosen} relative to all athletes", labels={"value": "Percentage"})
-        fig.update_layout(showlegend=False)
-        fig.update_traces(hovertemplate = "Year: %{label}: <br>Percentage: %{value}")
+        fig.update_layout(showlegend=False)            # legend is not shown
+        fig.update_traces(hovertemplate = "Year: %{label}: <br>Percentage: %{value}")       # adjust info shown when hoovering over graph
 
     return fig
 
