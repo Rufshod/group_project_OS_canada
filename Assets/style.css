@@ -1,5 +1,6 @@
+#header1{display:flex;}
 #os_logo{width:120px; margin-left: 80%;}
-#c_logo{width:100px; margin-left: 80%;}
+#c_logo{width:100px; margin-left: 20%;}
 .card{background-color: #dedede;} /*.card is now a class. that changes background color to blue
 /* #head1{border-collapse: collapse ;} */
 label{margin-right: 4%; margin-left: 10%; background-size: 50%; background-color: 

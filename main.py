@@ -47,13 +47,11 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
             # Card for Canada
             dbc.Card([
                 #Column with Text for Canada
-                dbc.Col([html.H1("Canada",id= "canada_text",className="" , style={"textDecoration": "underline"} ),
+                dbc.Col([html.H1("Canada",id= "canada_text",className="" , style={"textDecoration": "underline"} ,),
                 
-                #Column with CardImg
-                dbc.CardImg(src = "../assets/Flag_Canada.png", id="c_logo", className="")],width={}),
+                #Same Column as below with CardImg
+                dbc.CardImg(src = "../assets/Flag_Canada.png", id="c_logo", className="")], id="header1",width={}),
 
-                dbc.Col([]), # TODO REMOVE
-                
                 #Column with Dropdown for Canada
                 dbc.Col([dcc.Dropdown(id="canada_dropdown", className="mb-", multi=False, value="Number of medals", #Sets dropdown and chooses Swimming as default.
                         options=canada_options),]),
