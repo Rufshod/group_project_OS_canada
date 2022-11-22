@@ -72,7 +72,7 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
 # First row with dashboard header and olympic logo.
     dbc.Row([
 
-        dbc.Col([html.H1("Dashboard",id= "head1",className="text bold" )],width={"offset":0}, ), # html.H1 is Title or header, 
+        #dbc.Col([html.H1("Dashboard",id= "head1",className="" )],width={"offset":0}, ), # html.H1 is Title or header, 
         dbc.Col([html.Img(src= "../assets/os_logo.png", id="os_logo", className="mb-3 ")]),   
     ]),
 # Second row for both cards.
@@ -82,7 +82,8 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
             # Card for Canada
             dbc.Card([
                 #Column with Text for Canada
-                dbc.Col([html.H1("Canada",id= "canada_text",className="" , style={"textDecoration": "underline"} ),dbc.CardImg(src = "../assets/Flag_Canada.png", id="c_logo", className="")],width={}),
+                dbc.Col([html.H1("Canada",id= "canada_text",className="" , style={"textDecoration": "underline"} ),
+                dbc.CardImg(src = "../assets/Flag_Canada.png", id="c_logo", className="")],width={}),
 
                 #Column with CardImg
                 dbc.Col([]),
@@ -107,13 +108,14 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
                 #Column with Text for Sports
                 dbc.Col([html.H1("Sports",id= "sports_text",className="", style={"textDecoration": "underline"} )],width={}),
 
-                #Column with Dropdown for Sports
-                dbc.Col([dcc.Dropdown(id="sports_dropdown_options", value="Number of medals",  # auto selects both male and female
-                        options=sports_options)]),
                 
                 #Column with RadioItems for Sports
                 dbc.Col([dcc.RadioItems(id="sports_radio", options= radio_options, value="Swimming",)]
                 ,width = {}, className="mt-3 mb-3"),
+                
+                #Column with Dropdown for Sports
+                dbc.Col([dcc.Dropdown(id="sports_dropdown_options", value="Number of medals",  # auto selects both male and female
+                        options=sports_options)]),
                 #Column with Graph for Sports
                 dbc.Col([dcc.Graph(id="sport_graph", figure={},className="mb-3")],),
                 
