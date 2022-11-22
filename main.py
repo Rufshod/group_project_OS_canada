@@ -10,7 +10,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 from functions import clean_df_from_team, clean_df_from_athlet_repeat
 
-pio.templates.default = "gridon"
+pio.templates.default = "gridon" # Changes default template for all graphs. 
 
 #creating the dataframe with read csv
 df = pd.read_csv("Data/athlete_events.csv")
@@ -34,13 +34,8 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SANDSTONE],
 #----------------------------------------------------------
 
 app.layout = dbc.Container([ # Everything that shows up in the app needs to be in a container in order to be visable.
-# First row with dashboard header and olympic logo.
-    dbc.Row([
 
-        #dbc.Col([html.H1("Dashboard",id= "head1",className="" )],width={"offset":0}, ), # html.H1 is Title or header, 
-        dbc.Col([html.Img(src= "../assets/os_logo.png", id="os_logo", className="mb-3 ")]),   
-    ]),
-# Second row for both cards.
+# First row for both cards.
     dbc.Row([
     # Column for Canada
         dbc.Col([
@@ -53,10 +48,10 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
                 dbc.CardImg(src = "../assets/Flag_Canada.png", id="c_logo", className="")], id="header1",width={}),
 
                 #Column with Dropdown for Canada
-                dbc.Col([dcc.Dropdown(id="canada_dropdown", className="mb-", multi=False, value="Number of medals", #Sets dropdown and chooses Swimming as default.
+                dbc.Col([dcc.Dropdown(id="canada_dropdown", className="", multi=False, value="Number of medals", #Sets dropdown and chooses Swimming as default.
                         options=canada_options),]),
                 #Column with Graph for Canada
-                dbc.Col([dcc.Graph(id="canada_graph", figure={},className="card mb-3")],),
+                dbc.Col([dcc.Graph(id="canada_graph", figure={},className="card")],),
                 ],
             ),
         ],width={"size":6,"offset":0}),
@@ -66,23 +61,23 @@ app.layout = dbc.Container([ # Everything that shows up in the app needs to be i
             # Card for Sports
             dbc.Card([
                 #Column with Text for Sports
-                dbc.Col([html.H1("Sports",id= "sports_text",className="", style={"textDecoration": "underline"} )],width={}),
+                dbc.Col([html.H1("Sports",id= "sports_text",className="", style={"textDecoration": "underline"} ),html.Img(src= "../assets/os_logo.png", id="os_logo", className="")], id="header2",width={}),
 
                 
                 #Column with RadioItems for Sports
                 dbc.Col([dcc.RadioItems(id="sports_radio", options= radio_options, value="Swimming",)]
-                ,width = {}, className="mt-3 mb-3"),
+                ,width = {}, className=""),
                 
                 #Column with Dropdown for Sports
                 dbc.Col([dcc.Dropdown(id="sports_dropdown_options", value="Number of medals",  # auto selects both male and female
                         options=sports_options)]),
                 #Column with Graph for Sports
-                dbc.Col([dcc.Graph(id="sport_graph", figure={},className="mb-3")],),
+                dbc.Col([dcc.Graph(id="sport_graph", figure={},className="mt-4 mb-3")],),
                 ]
             )
         ],width={"size":6,"offset":0}),
-    ])
-])
+    ],)
+],className="col", fluid=True)
 
 #--------------------------------------------------------------------------------
 # canada analysis call-back
@@ -103,19 +98,19 @@ def update_canada_graph(analysis_chosen):
         # dff: removed pultiple entries for team efforts, grouped by Sport and counted valies for Medal, sorted and picked 10 top values
         dff = clean_df_from_team(dff).groupby("Sport").count().sort_values(by="Medal", ascending=False).head(10)
         # bar plot with x = Sport, y = medal
-        fig = px.bar(dff, x=dff.index, y=["Medal"], title="Canada 10 top sports", labels={"value": "Total number of medals"})
+        fig = px.bar(dff, x=dff.index, y=["Medal"], title="Canada 10 top sports", labels={"value": "Total number of medals"}, color_discrete_sequence=["#b91d1d"])
         # legend is not shown
         fig.update_layout(showlegend=False)
     
     if analysis_chosen == "Number of medals":
         dff = clean_df_from_team(dff).groupby("Year").count().sort_values(by="Medal", ascending=False)
-        fig = px.bar(dff, x=dff.index, y=["Medal"], title="Canadian medals per olympics", labels={"value": "Total number of medals"})
+        fig = px.bar(dff, x=dff.index, y=["Medal"], title="Canadian medals per olympics", labels={"value": "Total number of medals"}, color_discrete_sequence=["#b91d1d"])
         fig.update_layout(showlegend=False)
 
     if analysis_chosen == "Age distribution":
-        fig = px.histogram(dff, x="Age", nbins=80, title="Age distribution canadian athletes", labels={"count": "Number of athletes"})     
+        fig = px.histogram(dff, x="Age", nbins=80, title="Age distribution canadian athletes", labels={"count": "Number of athletes"}, color_discrete_sequence=["#b91d1d"])     
         fig.update_layout(yaxis_title="Number of athletes")
-        
+   
     return fig                                    # returns figure till Output
 
 #---------------------------------------------------------------------------------------------------
@@ -134,18 +129,18 @@ def uppdate_sports_graph(analysis_chosen, sport_chosen):
 
     if analysis_chosen == "Number of medals":
         dff = clean_df_from_team(dff).groupby("Year").agg({"Medal":"count", "Age":"mean"})
-        fig = px.bar(dff, x=dff.index, y=["Medal"], title=f"Total number of medals in {sport_chosen} per year", labels={"value": "Number of medals"})
+        fig = px.bar(dff, x=dff.index, y=["Medal"], title=f"Total number of medals in {sport_chosen} per year", labels={"value": "Number of medals"}, color_discrete_sequence=["#b91d1d"])
         fig.update_layout(showlegend=False)
         fig.update_traces(hovertemplate = "Year: %{label}: <br>Number of medals: %{value}")
     
     if analysis_chosen == "Average age per year":
         dff = dff.groupby("Year").agg({"Medal":"count", "Age":"mean"})
-        fig = px.bar(dff, x=dff.index, y=["Age"], title= f"Average age in {sport_chosen} per year", labels={"value": "Average age"})
+        fig = px.bar(dff, x=dff.index, y=["Age"], title= f"Average age in {sport_chosen} per year", labels={"value": "Average age"}, color_discrete_sequence=["#b91d1d"])
         fig.update_layout(showlegend=False, yaxis_range = [15,30])
-        fig.update_traces(hovertemplate = "Year: %{label}: <br>Average age: %{value}")
+        fig.update_traces(hovertemplate = "Year: %{label}: <br>Average age: %{value}",)
     
     if analysis_chosen == "Age distribution":
-        fig = px.histogram(dff, x="Age", nbins=80, title= f"Age distribution {sport_chosen}", labels={"count": "Number of athletes"})
+        fig = px.histogram(dff, x="Age", nbins=80, title= f"Age distribution {sport_chosen}", labels={"count": "Number of athletes"}, color_discrete_sequence=["#b91d1d"])
         fig.update_layout(yaxis_title="Number of athletes")
 
     if analysis_chosen == "Relative number of athletes":
@@ -158,7 +153,8 @@ def uppdate_sports_graph(analysis_chosen, sport_chosen):
         dff["Rel athletes in sport"] = 100 * dff["Number in sport"]/dff["Number tot"]
         fig = px.line(dff, x=dff.index, y=["Rel athletes in sport"], title=f"Number of athletes in {sport_chosen} relative to all athletes", labels={"value": "Percentage"})
         fig.update_layout(showlegend=False)            # legend is not shown
-        fig.update_traces(hovertemplate = "Year: %{label}: <br>Percentage: %{value}")       # adjust info shown when hoovering over graph
+        fig.update_traces(hovertemplate = "Year: %{label}: <br>Percentage: %{value}", line_color="#b91d1d", line_width=5)       # adjust info shown when hoovering over graph  and changes color of line
+
 
     return fig
 

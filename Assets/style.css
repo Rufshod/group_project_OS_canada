@@ -1,7 +1,11 @@
-#header1{display:flex;}
-#os_logo{width:120px; margin-left: 80%;}
-#c_logo{width:100px; margin-left: 20%;}
-.card{background-color: #dedede;} /*.card is now a class. that changes background color to blue
+#header1{display:flex; gap: 60%;}
+#header2{display:flex; gap: 60%;}
+#os_logo{width:120px;height:60px;}
+#c_logo{width:100px; height:55px;}
+#sports_radio{accent-color: #b91d1d ;}
+#canada_dropdown{margin-top: 11%;}
+.card{background-color: #dedede; padding: 20px;} /*.card is now a class. that changes background color to blue
 /* #head1{border-collapse: collapse ;} */
-label{margin-right: 4%; margin-left: 10%; background-size: 50%; background-color: 
-    #ececec; border-style: groove; border: 2px solid rgb(89, 89, 89); border-radius: 5px;}
+label{margin-right: 4%; margin-left: 13%; background-size: 50%; background-color: 
+    #ffffff; border-style: groove; border: 3px solid #b91d1d; border-radius: 5px; padding: 5px;}
+.col{ padding: 20px;}
