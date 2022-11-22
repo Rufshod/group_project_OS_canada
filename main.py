@@ -17,18 +17,21 @@ df = pd.read_csv("Data/athlete_events.csv")
 
 #--------------------------------------------------
 
-
 # Option variables for dropdown and radio.
 canada_options = [{"label": option, "value": option} for option in ("Best sports", "Number of medals", "Age distribution")]
 sports_options = [{"label": option, "value": option} for option in ("Number of medals", "Average age per year", "Age distribution", "Relative number of athletes")]
 radio_options = [{"label": option, "value": option} for option in ("Athletics", "Swimming", "Gymnastics")]
 
+#----------------------------------------------------------
+
 #creating the app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SANDSTONE],
                 meta_tags=[{"name": "viewport","content": "width=device-width, initial-scale=1.0"}]) # automaticly creates a responsive site so that mobileusers can use it.
 
+server = app.server  # Needed for Heroku to connect to app.
+
 #----------------------------------------------------------
-server = app.server 
+
 # Layout section: Bootstrap
 
 #----------------------------------------------------------
