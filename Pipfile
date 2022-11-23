@@ -21,7 +21,7 @@ lxml = "*"
 python-dotenv = "*"
 dash = "*"
 dash-bootstrap-components = "*"
-
+gunicorn = "*"
 
 [dev-packages]
 ipykernel = "*"

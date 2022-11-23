@@ -26,7 +26,7 @@ radio_options = [{"label": option, "value": option} for option in ("Athletics", 
 
 #creating the app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SANDSTONE],
-                meta_tags=[{"name": "viewport","content": "width=device-width, initial-scale=1.0"}]) # automaticly creates a responsive site so that mobileusers can use it.
+                meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1.0"}]) # automaticly creates a responsive site so that mobileusers can use it.
 
 server = app.server  # Needed for Heroku to connect to app.
 
