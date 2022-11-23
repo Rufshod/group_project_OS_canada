@@ -1,4 +1,3 @@
-#Youtube codealong: https://www.youtube.com/watch?v=0mfIK8zxUds&t=662
 
 import dash
 from dash import dcc
