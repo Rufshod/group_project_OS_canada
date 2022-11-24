@@ -7,3 +7,9 @@
 ## Deployment:
 - https://dashboard.heroku.com
 - Used to deploy dashboard.
+
+## Pictures:
+- https://commons.wikimedia.org/wiki/File:Flag_of_Canada.png
+- Canada flag
+- https://logos-download.com/6759-olympic-rings-logo-download.html
+- Olympic logo.
